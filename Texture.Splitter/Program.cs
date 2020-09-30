@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
 using Texture.Splitter.SpriteSheets;
 
 namespace Texture.Splitter
@@ -14,34 +14,33 @@ namespace Texture.Splitter
 
         public static void Main(string[] args)
         {
-            var resultDirectory = Directory.GetCurrentDirectory() + "/Result/";
+            var arguments = args.ToList();
+            var plistFile = Path.GetFullPath(arguments[0]);
+            var outputDirectory = Path.GetFullPath(arguments[arguments.IndexOf("-o") + 1]);
 
-            if (!Directory.Exists(resultDirectory))
-            {
-                Directory.CreateDirectory(resultDirectory);
-                Console.WriteLine("Result directory has been created automatically");
-
-                // TODO: Remove.
-                return;
-            }
+            if (!File.Exists(plistFile))
+                throw new ArgumentException("File does not exist.");
+            
+            if (!Directory.Exists(outputDirectory))
+                throw new ArgumentException("Directory does not exist.");
 
             write("Starting stopwatch");
             stopwatch.Start();
 
             write("Lexing file.plist");
-            var plist = new Plist(resultDirectory + "file.plist");
+            var plist = new Plist(plistFile);
             write("Loading spritesheet file");
             var spriteSheet = SpriteSheet.LoadSpriteSheet(plist);
 
             write("Done! Splitting sprites...");
 
-            using (var image = Image.Load(resultDirectory + spriteSheet.Metadata.FileName))
+            using (var image = Image.Load(Path.GetFileNameWithoutExtension(plistFile) + ".png"))
             {
                 foreach (var frame in spriteSheet.Frames)
                 {
                     write($"Extracting {frame.SpriteName}... ");
 
-                    new Task(() => Splitter.GetSprite(frame, image).SaveAsPng(resultDirectory + "/h/" + frame.SpriteName)).Start();
+                    new Task(() => Splitter.GetSprite(frame, image).SaveAsPng(Path.Combine(outputDirectory, frame.SpriteName))).Start();
 
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                     write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
