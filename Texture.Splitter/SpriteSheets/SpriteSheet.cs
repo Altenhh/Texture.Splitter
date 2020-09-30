@@ -4,7 +4,7 @@ using System.Linq;
 using System.Numerics;
 using SixLabors.ImageSharp;
 
-namespace Texture.Splitter.Spreadsheets
+namespace Texture.Splitter.SpriteSheets
 {
     public class SpriteSheet
     {

@@ -1,6 +1,6 @@
 ﻿using SixLabors.ImageSharp;
 
-namespace Texture.Splitter.Spreadsheets
+namespace Texture.Splitter.SpriteSheets
 {
     /// <summary>
     /// Texture size, format, texture file name.

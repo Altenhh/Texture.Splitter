@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using Texture.Splitter.Spreadsheets;
+using Texture.Splitter.SpriteSheets;
 
 namespace Texture.Splitter
 {

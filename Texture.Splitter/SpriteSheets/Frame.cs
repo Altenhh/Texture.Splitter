@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using SixLabors.ImageSharp;
 
-namespace Texture.Splitter.Spreadsheets
+namespace Texture.Splitter.SpriteSheets
 {
     /// <summary>
     /// Contains all sprite frames.
