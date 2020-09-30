@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using Texture.Splitter.SpriteSheets;
@@ -40,22 +41,7 @@ namespace Texture.Splitter
                 {
                     write($"Extracting {frame.SpriteName}... ");
 
-                    if (frame.Rotated)
-                    {
-                        var (x, y, width, height) = frame.TextureRect;
-
-                        frame.TextureRect = new Rectangle(x, y, height, width);
-                    }
-
-                    var sprite = image.Clone(i =>
-                    {
-                        i.Crop(frame.TextureRect);
-
-                        if (frame.Rotated)
-                            i.Rotate(RotateMode.Rotate270);
-                    });
-
-                    sprite.SaveAsPng(resultDirectory + "/h/" + frame.SpriteName);
+                    new Task(() => Splitter.GetSprite(frame, image).SaveAsPng(resultDirectory + "/h/" + frame.SpriteName)).Start();
 
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                     write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
