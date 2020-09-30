@@ -24,7 +24,7 @@ namespace Texture.Splitter.SpriteSheets
             #region Frames
             foreach (var (name, pFrame) in plistFrames)
             {
-                var spOffset = convertVector<int>((string)pFrame["spriteOffset"]).ToArray();
+                var spOffset = convertVector<float>((string)pFrame["spriteOffset"]).ToArray();
                 var spSize = convertVector<int>((string)pFrame["spriteSize"]).ToArray();
                 var spSourceSize = convertVector<int>((string)pFrame["spriteSourceSize"]).ToArray();
                 var spTextureRect = convertVector<int>((string)pFrame["textureRect"]).ToArray();
