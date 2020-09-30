@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using Texture.Splitter.Spreadsheets;
 
 namespace Texture.Splitter
 {
@@ -6,7 +8,20 @@ namespace Texture.Splitter
     {
         public static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            var resultDirectory = Directory.GetCurrentDirectory() + "/Result";
+
+            if (!Directory.Exists(resultDirectory))
+            {
+                Directory.CreateDirectory(resultDirectory);
+                Console.WriteLine("Result directory has been created automatically");
+                
+                // TODO: Remove.
+                return;
+            }
+
+            var plist = new Plist(resultDirectory + "/file.plist");
+            var spriteSheet = SpriteSheet.LoadSpriteSheet(plist);
+            Console.WriteLine(spriteSheet);
         }
     }
 }
