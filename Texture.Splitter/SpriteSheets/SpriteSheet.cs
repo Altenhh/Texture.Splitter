@@ -9,7 +9,6 @@ namespace Texture.Splitter.SpriteSheets
     public class SpriteSheet
     {
         public Frame[] Frames { get; set; }
-
         public Metadata Metadata { get; set; }
 
         public static SpriteSheet LoadSpriteSheet(Plist plist)
@@ -24,10 +23,10 @@ namespace Texture.Splitter.SpriteSheets
             #region Frames
             foreach (var (name, pFrame) in plistFrames)
             {
-                var spOffset = convertVector<float>((string)pFrame["spriteOffset"]).ToArray();
-                var spSize = convertVector<int>((string)pFrame["spriteSize"]).ToArray();
-                var spSourceSize = convertVector<int>((string)pFrame["spriteSourceSize"]).ToArray();
-                var spTextureRect = convertVector<int>((string)pFrame["textureRect"]).ToArray();
+                var spOffset = convertVector<float>((string) pFrame["spriteOffset"]).ToArray();
+                var spSize = convertVector<int>((string) pFrame["spriteSize"]).ToArray();
+                var spSourceSize = convertVector<int>((string) pFrame["spriteSourceSize"]).ToArray();
+                var spTextureRect = convertVector<int>((string) pFrame["textureRect"]).ToArray();
                 List<object> spAliases = pFrame["aliases"];
 
                 frames.Add(new Frame
@@ -44,12 +43,13 @@ namespace Texture.Splitter.SpriteSheets
 
             spriteSheet.Frames = frames.ToArray();
             #endregion
+
             #region Metadata
             metadata.Format = plistMetadata["format"];
             metadata.PixelFormat = plistMetadata["pixelFormat"];
             metadata.PremultiplyAlpha = plistMetadata["premultiplyAlpha"];
 
-            var metaSize = convertVector<int>((string)plistMetadata["size"]).ToArray();
+            var metaSize = convertVector<int>((string) plistMetadata["size"]).ToArray();
             metadata.Size = new Size(metaSize[0], metaSize[1]);
 
             metadata.FileName = plistMetadata["textureFileName"];
@@ -65,9 +65,9 @@ namespace Texture.Splitter.SpriteSheets
             var trimmed = vectorString.Trim('{', '}');
             var split = trimmed.Split(',');
             var type = typeof(T);
-            
+
             foreach (var s in split)
-                yield return (T)Convert.ChangeType(s.Trim('{', '}'), type);
+                yield return (T) Convert.ChangeType(s.Trim('{', '}'), type);
         }
     }
 }

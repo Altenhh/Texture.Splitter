@@ -10,7 +10,7 @@ namespace Texture.Splitter
     public static class Program
     {
         private static readonly Stopwatch stopwatch = new Stopwatch();
-        
+
         public static void Main(string[] args)
         {
             var resultDirectory = Directory.GetCurrentDirectory() + "/Result/";
@@ -19,11 +19,11 @@ namespace Texture.Splitter
             {
                 Directory.CreateDirectory(resultDirectory);
                 Console.WriteLine("Result directory has been created automatically");
-                
+
                 // TODO: Remove.
                 return;
             }
-            
+
             write("Starting stopwatch");
             stopwatch.Start();
 
@@ -31,7 +31,7 @@ namespace Texture.Splitter
             var plist = new Plist(resultDirectory + "file.plist");
             write("Loading spritesheet file");
             var spriteSheet = SpriteSheet.LoadSpriteSheet(plist);
-            
+
             write("Done! Splitting sprites...");
 
             using (var image = Image.Load(resultDirectory + spriteSheet.Metadata.FileName))
@@ -39,14 +39,14 @@ namespace Texture.Splitter
                 foreach (var frame in spriteSheet.Frames)
                 {
                     write($"Extracting {frame.SpriteName}... ");
-                    
+
                     if (frame.Rotated)
                     {
                         var (x, y, width, height) = frame.TextureRect;
 
                         frame.TextureRect = new Rectangle(x, y, height, width);
                     }
-                        
+
                     var sprite = image.Clone(i =>
                     {
                         i.Crop(frame.TextureRect);
@@ -54,14 +54,14 @@ namespace Texture.Splitter
                         if (frame.Rotated)
                             i.Rotate(RotateMode.Rotate270);
                     });
-                        
+
                     sprite.SaveAsPng(resultDirectory + "/h/" + frame.SpriteName);
-                    
+
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                     write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
                 }
             }
-            
+
             write("Finished!");
             stopwatch.Stop();
         }

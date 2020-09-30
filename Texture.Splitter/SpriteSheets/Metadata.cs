@@ -18,7 +18,7 @@ namespace Texture.Splitter.SpriteSheets
         public string PixelFormat { get; set; }
 
         /// <summary>
-        /// Whether to premultiply the Alpha channel. 
+        /// Whether to premultiply the Alpha channel.
         /// </summary>
         public bool PremultiplyAlpha { get; set; }
 

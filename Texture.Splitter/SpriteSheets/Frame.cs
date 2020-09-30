@@ -12,7 +12,7 @@ namespace Texture.Splitter.SpriteSheets
         /// The name of the sprite.
         /// </summary>
         public string SpriteName { get; set; }
-        
+
         /// <summary>
         /// A reference to sprites containing the same image data.
         /// </summary>
