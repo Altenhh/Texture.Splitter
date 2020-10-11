@@ -1,12 +1,12 @@
-﻿using SixLabors.ImageSharp;
-using SixLabors.ImageSharp.Processing;
+﻿using System.Drawing;
+using System.Drawing.Imaging;
 using Texture.Splitter.SpriteSheets;
 
 namespace Texture.Splitter
 {
     public static class Splitter
     {
-        public static Image GetSprite(Frame frame, Image spriteSheet)
+        public static Bitmap GetSprite(Frame frame, Bitmap spriteSheet)
         {
             int width;
             int height;
@@ -22,13 +22,12 @@ namespace Texture.Splitter
                 height = frame.TextureRect.Height;
             }
 
-            return spriteSheet.Clone(i =>
-            {
-                i.Crop(new Rectangle(frame.TextureRect.X, frame.TextureRect.Y, width, height));
+            var cropped = spriteSheet.Clone(new Rectangle(frame.TextureRect.X, frame.TextureRect.Y, width, height), PixelFormat.DontCare);
 
-                if (frame.Rotated)
-                    i.Rotate(RotateMode.Rotate270);
-            });
+            if (frame.Rotated)
+                cropped.RotateFlip(RotateFlipType.Rotate270FlipNone);
+
+            return cropped;
         }
     }
 }

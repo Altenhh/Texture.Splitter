@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
-using SixLabors.ImageSharp;
 using Texture.Splitter.SpriteSheets;
 
 namespace Texture.Splitter
@@ -34,17 +34,30 @@ namespace Texture.Splitter
 
             write("Done! Splitting sprites...");
 
-            using (var image = Image.Load(Path.GetFileNameWithoutExtension(plistFile) + ".png"))
+            using (var fileStream = new FileStream(Path.GetFileNameWithoutExtension(plistFile) + ".png", FileMode.Open))
+            using (var image = new Bitmap(fileStream))
             {
                 foreach (var frame in spriteSheet.Frames)
                 {
                     write($"Extracting {frame.SpriteName}... ");
 
-                    new Task(() => Splitter.GetSprite(frame, image).SaveAsPng(Path.Combine(outputDirectory, frame.SpriteName))).Start();
+                    using (var graphics = Graphics.FromImage(image))
+                    {
+                        graphics.CompositingQuality = CompositingQuality.HighQuality;
+                        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        graphics.CompositingMode = CompositingMode.SourceCopy;
 
-                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
-                    write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
+                        Splitter.GetSprite(frame, image).Save(Path.Combine(outputDirectory, frame.SpriteName));
+                    
+                        Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
+                        write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
+                        
+                        graphics.Dispose();
+                    }
                 }
+                
+                image.Dispose();
+                fileStream.Dispose();
             }
 
             write("Finished!");

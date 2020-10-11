@@ -1,5 +1,5 @@
-﻿using System.Numerics;
-using SixLabors.ImageSharp;
+﻿using System.Drawing;
+using System.Numerics;
 
 namespace Texture.Splitter.SpriteSheets
 {
