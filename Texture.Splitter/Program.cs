@@ -40,14 +40,38 @@ namespace Texture.Splitter
                 foreach (var frame in spriteSheet.Frames)
                 {
                     write($"Extracting {frame.SpriteName}... ");
+                    var sprite = Splitter.GetSprite(frame, image);
 
-                    using (var graphics = Graphics.FromImage(image))
+                    using (var graphics = Graphics.FromImage(sprite))
                     {
                         graphics.CompositingQuality = CompositingQuality.HighQuality;
                         graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
                         graphics.CompositingMode = CompositingMode.SourceCopy;
 
-                        Splitter.GetSprite(frame, image).Save(Path.Combine(outputDirectory, frame.SpriteName));
+                        #region Tiling
+                        if (arguments.Any(a => a == "-t" || a == "--tile"))
+                        {
+                            Console.Error.WriteLine("Tiling feature is currently unavailable.");
+
+                            return;
+
+                            var tiledImage = new Bitmap(frame.SourceSize.Width, frame.SourceSize.Height);
+                            var brush = new TextureBrush(sprite) { WrapMode = WrapMode.TileFlipXY };
+
+                            using (var g = Graphics.FromImage(tiledImage))
+                            {
+                                g.FillRegion(brush, new Region(new Rectangle(0, 0, frame.SourceSize.Width, frame.SourceSize.Height)));
+                                
+                                tiledImage.Save(Path.Combine(outputDirectory, frame.SpriteName));
+                            }
+                        }
+                        else
+                        {
+                            var brush = new TextureBrush(sprite);
+                            graphics.FillRectangle(brush, 0, 0, sprite.Width, sprite.Height);
+                            sprite.Save(Path.Combine(outputDirectory, frame.SpriteName));
+                        }
+                        #endregion
                     
                         Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 1);
                         write($"Extracting {frame.SpriteName}... Done!", ConsoleColor.Yellow);
