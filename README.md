@@ -3,7 +3,7 @@ Splits any plist textures. Mainly used for Euclidean / Geometry Dash.
 
 ### Features to come.
 - [ ] CLI Interface.
-- [ ] Edge mirroring.
+- [ ] Edge mirroring (tiling).
 - [ ] Size and positioning correction (using offsets).
 
 ### Contributions
